@@ -1,6 +1,6 @@
 from odoo import api, fields, models
 
-class SaleOrder(models.Model):
+class NxcSalesChecklistSaleOrder(models.Model):
     _inherit = 'sale.order'
 
     #Sales Checklist Status Indicator

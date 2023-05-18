@@ -18,47 +18,47 @@
           </header>
           <sheet>
             <field name="payment_term_id" />
-            <field name="sales_checklist_status" string="Sales Checklist Status" widget="kanban_state_selection" force_save="True" attrs="" readonly="1"/>
-            <page string="Feasibility Review" name="page_feasibility_review" attrs="{}">
+            <field name="sales_checklist_status" widget="kanban_state_selection" force_save="True" attrs="" readonly="1"/>
+            <page string="Feasibility Review" name="page_feasibility_review">
               <group name="group_feasibility_review">
                 <group name="group_feasibility_review_left" string="Complete The Following: (Prior to quote send)">
-                  <field name="feasibility_review_item_1" string="Product(s) is/are Adequately Defined"/>
-                  <field name="feasibility_review_item_2" string="Product(s) can be manufactured as designed/specified"/>
-                  <field name="feasibility_review_item_3" string="Any special characteristics have been identified"/>
-                  <field name="feasibility_review_item_4" string="Product performance requirements can be met"/>
+                  <field name="feasibility_review_item_1"/>
+                  <field name="feasibility_review_item_2"/>
+                  <field name="feasibility_review_item_3"/>
+                  <field name="feasibility_review_item_4"/>
                 </group>
                 <group name="group_feasibility_review_right">
-                  <field name="feasibility_review_item_5" string="Statutory and regulatory requirements understood and can be met"/>
-                  <field name="feasibility_review_item_6" string="Any nonstandard manufacturing methods are defined"/>
-                  <field name="feasibility_review_item_7" string="Product meets customer-defined objectives (Price &amp; Timing)"/>
-                  <field name="feasibility_review_item_8" string="Product meets our goals for cost and margin"/>
-                  <field name="feasibility_review_item_9" string="Feasibility Rating"/>
-                  <field name="feasibility_review_complete" widget="boolean_toggle" string="Feasibility Review Complete" attrs="{}" invisible="1"/>
+                  <field name="feasibility_review_item_5"/>
+                  <field name="feasibility_review_item_6"/>
+                  <field name="feasibility_review_item_7"/>
+                  <field name="feasibility_review_item_8"/>
+                  <field name="feasibility_review_item_9"/>
+                  <field name="feasibility_review_complete" widget="boolean_toggle" invisible="1"/>
                 </group>
               </group>
               <group name="group_feasibility_review_optional">
                 <group name="group_feasibility_review_optional_left" string="Medical Devices Only:">
-                  <field name="device_master_record_complete" string="Device Master Record (DMR) completed" help="Located in product page"/>
+                  <field name="device_master_record_complete" help="Located in product page"/>
                 </group>
                 <group name="group_feasibility_review_optional_right">
-                  <field name="feasibility_remarks" string="Remarks"/>
+                  <field name="feasibility_remarks"/>
                 </group>
               </group>
             </page>
             <page string="Contract Review" name="page_contract_review" attrs="{'invisible': [['feasibility_review_complete', '=', False]]}">
               <group name="group_contract_review">
                 <group name="group_contract_review_left" string="Verify the following is consistent between Quote and Purchase Order: (To be completed when processing incoming PO)">
-                  <field name="contract_review_item_1" string="Product Category is Accurately Configured" help="Useful for BOM assignment"/>
-                  <field name="contract_review_item_2" string="Product &amp; Quantities are Correct"/>
-                  <field name="contract_review_item_3" string="Payment Terms are Correct" help="NXC Standard: Net 30"/>
-                  <field name="contract_review_item_4" string="Pricing is Correct for Required Quantities"/>
+                  <field name="contract_review_item_1" help="Useful for BOM assignment"/>
+                  <field name="contract_review_item_2"/>
+                  <field name="contract_review_item_3" help="NXC Standard: Net 30"/>
+                  <field name="contract_review_item_4" />
                 </group>
                 <group name="group_contract_review_right">
-                  <field name="contract_review_item_5" string="Latest CAD Data &amp; Associated Specs Available" help="Confirm data from customer is up-to-date"/>
-                  <field name="contract_review_item_6" string="Customer Identity is Correct"/>
-                  <field name="contract_review_item_7" string="Customer is Aware of Potential Risks"/>
-                  <field name="contract_review_item_8" string="Delivery Date / Lead Time(s) Confirmed" help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page."/>
-                  <field name="contract_review_complete" string="Contract Review Complete" widget="boolean_toggle" attrs="" invisible="1"/>
+                  <field name="contract_review_item_5"/>
+                  <field name="contract_review_item_6"/>
+                  <field name="contract_review_item_7"/>
+                  <field name="contract_review_item_8"help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page."/>
+                  <field name="contract_review_complete" widget="boolean_toggle" attrs="" invisible="1"/>
                 </group>
               </group>
             </page>
