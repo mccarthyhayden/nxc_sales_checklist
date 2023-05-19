@@ -57,7 +57,7 @@
                   <field name="contract_review_item_5"/>
                   <field name="contract_review_item_6"/>
                   <field name="contract_review_item_7"/>
-                  <field name="contract_review_item_8"help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page."/>
+                  <field name="contract_review_item_8" help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page."/>
                   <field name="contract_review_complete" widget="boolean_toggle" attrs="" invisible="1"/>
                 </group>
               </group>

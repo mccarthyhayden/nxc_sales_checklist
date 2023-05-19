@@ -7,7 +7,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     sales_checklist_status = fields.Selection([
         ('blocked','In-Progress'),
         ('done','Done'),
-    ], string="Checklist Status")
+    ], string="Checklist Status" compute="_compute_sales_checklist_status", readonly=True)
     
     #Feasiblity Review Checklist items
     feasibility_review_item_1 = fields.Boolean(string="Product(s) is/are Adequately Defined")
@@ -22,10 +22,10 @@ class NxcSalesChecklistSaleOrder(models.Model):
         ('1','NOT Feasible - Revisions Required'),
         ('2','Feasible - Revisions Recommended'),
         ('3','Feasible - No Revisions Needed'),
-    ], string="Feasability Rating")
+    ], string="Feasability Rating" )
     device_master_record_complete = fields.Boolean(string="Device Master Record (DMR) completed")
     feasibility_remarks = fields.Html(string="Remarks")
-    feasibility_review_complete = fields.boolean(string="Feasbility Review Complete")
+    feasibility_review_complete = fields.boolean(string="Feasbility Review Complete" compute="_compute_feasibility_review_complete", readonly=True)
 
     #Contract Review Checklist items
     contract_review_item_1 = fields.Boolean(string="Product Category is Accurately Configured")
@@ -36,7 +36,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     contract_review_item_6 = fields.Boolean(string="Customer Identity is Correct")
     contract_review_item_7 = fields.Boolean(string="Customer is Aware of Potential Risks")
     contract_review_item_8 = fields.Boolean(string="Delivery Date / Lead Time(s) Confirmed")
-    contract_review_complete = fields.Boolean(string="Contract Review Complete")
+    contract_review_complete = fields.Boolean(string="Contract Review Complete" compute="_compute_contract_review_complete", readonly=True)
 
     def _block_order_confirm_in_draft(self):
         action = self.env['ir.actions.server'].sudo().create({
@@ -83,3 +83,49 @@ class NxcSalesChecklistSaleOrder(models.Model):
                 record.message_post(body="Cannot confirm Quotation: Awaiting sales checklists completion.")
 
         return action
+    
+    @api.onchange
+    def _compute_feasibility_review_complete(self):
+    #This function determines whether the feasibility review is complete.
+    #Returns True if the feasibility review is complete, False otherwise.
+      if (
+        record.feasibility_review_item_1 and
+        record.feasibility_review_item_2 and
+        record.feasibility_review_item_3 and
+        record.feasibility_review_item_4 and
+        record.feasibility_review_item_5 and
+        record.feasibility_review_item_6 and
+        record.feasibility_review_item_7 and
+        record.feasibility_review_item_8 and
+        record.feasibility_review_item_9 in ('1', '2', '3')
+      ):
+        return True
+      else:
+        return False
+
+    @api.onchange
+    def _compute_contract_review_complete(self):
+    #This function determines whether the contract review is complete.
+    #Returns True if the contract review is complete, False otherwise.
+      if (
+        record.contract_review_item_1 and
+        record.contract_review_item_2 and
+        record.contract_review_item_3 and
+        record.contract_review_item_4 and
+        record.contract_review_item_5 and
+        record.contract_review_item_6 and
+        record.contract_review_item_7 and
+        record.contract_review_item_8 and
+      ):
+        return True
+      else:
+        return False
+    
+    @api.onchange
+    def _compute_sales_checklist_status(self):
+    #This method computes the value of the `sales_checklist_status` field.
+    #The value of the `sales_checklist_status` field.
+      if record.feasibility_review_complete and record.contract_review_complete:
+        return 'done'
+      else:
+        return 'blocked'
