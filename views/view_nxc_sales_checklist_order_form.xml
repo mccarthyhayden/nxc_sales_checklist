@@ -4,7 +4,7 @@
     <record id="view_nxc_sales_checklist_form" model="ir.ui.view">
       <field name="name">nxc.sales.checklist.form</field>
       <field name="model">nxc.sales.checklist</field>
-      <field name="inherit_id">sale.view_order_form</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
         <form string="Sales Checklist" version="1.0">
           <header>
