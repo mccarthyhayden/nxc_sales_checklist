@@ -36,7 +36,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     contract_review_item_6 = fields.Boolean(string="Customer Identity is Correct")
     contract_review_item_7 = fields.Boolean(string="Customer is Aware of Potential Risks")
     contract_review_item_8 = fields.Boolean(string="Delivery Date / Lead Time(s) Confirmed")
-    contract_review_complete = fields.Boolean(string="Contract Review Complete", compute="_compute_contract_review_complete", Tracking = True)
+    contract_review_complete = fields.Boolean(string="Contract Review Complete", compute="_compute_contract_review_complete", tracking = True)
     
     @api.onchange('feasibility_review_item_1', 'feasibility_review_item_2', 'feasibility_review_item_3', 'feasibility_review_item_4', 'feasibility_review_item_5', 'feasibility_review_item_6', 'feasibility_review_item_7', 'feasibility_review_item_8', 'feasibility_review_item_9')
     def _compute_feasibility_review_complete(self):
