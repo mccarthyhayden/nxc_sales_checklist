@@ -32,7 +32,7 @@
                 <field name="feasibility_review_item_6" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
                 <field name="feasibility_review_item_7" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
                 <field name="feasibility_review_item_8" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
-                <field name="feasibility_review_item_9" widget="selection" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
+                <field name="feasibility_review_item_9" widget="selection" force_save="True"/>
                 <field name="feasibility_review_complete" widget="boolean_toggle" readonly="True" invisible="True"/>
               </group>
             </group>
@@ -57,7 +57,7 @@
                 <field name="contract_review_item_5" widget="boolean" attrs="{'readonly': [['contract_review_complete','=',True]]}" force_save="True"/>
                 <field name="contract_review_item_6" widget="boolean" attrs="{'readonly': [['contract_review_complete','=',True]]}" force_save="True"/>
                 <field name="contract_review_item_7" widget="boolean" attrs="{'readonly': [['contract_review_complete','=',True]]}" force_save="True"/>
-                <field name="contract_review_item_8" help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page." widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
+                <field name="contract_review_item_8" help="Delivery Date to be set in 'Other Info' tab. Product-specific lead times (optional) can be set in product page." widget="boolean" attrs="{'readonly': [['contract_review_complete','=',True]]}" force_save="True"/>
                 <field name="contract_review_complete" widget="boolean_toggle" readonly="True" invisible="True"/>
               </group>
             </group>
