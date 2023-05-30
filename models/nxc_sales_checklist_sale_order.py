@@ -25,7 +25,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     ], string="Feasability Rating" )
     device_master_record_complete = fields.Boolean(string="Device Master Record (DMR) completed")
     feasibility_remarks = fields.Html(string="Remarks")
-    feasibility_review_complete = fields.boolean(string="Feasbility Review Complete", compute="_compute_feasibility_review_complete", tracking = True)
+    feasibility_review_complete = fields.Boolean(string="Feasbility Review Complete", compute="_compute_feasibility_review_complete", tracking = True)
 
     #Contract Review Checklist items
     contract_review_item_1 = fields.Boolean(string="Product Category is Accurately Configured")
