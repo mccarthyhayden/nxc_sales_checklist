@@ -7,7 +7,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     sales_checklist_status = fields.Selection([
         ('blocked','In-Progress'),
         ('done','Done'),
-    ], string="Checklist Status" compute="_compute_sales_checklist_status", readonly=True)
+    ], string="Checklist Status", compute="_compute_sales_checklist_status", tracking = True)
     
     #Feasiblity Review Checklist items
     feasibility_review_item_1 = fields.Boolean(string="Product(s) is/are Adequately Defined")
@@ -25,7 +25,7 @@ class NxcSalesChecklistSaleOrder(models.Model):
     ], string="Feasability Rating" )
     device_master_record_complete = fields.Boolean(string="Device Master Record (DMR) completed")
     feasibility_remarks = fields.Html(string="Remarks")
-    feasibility_review_complete = fields.boolean(string="Feasbility Review Complete" compute="_compute_feasibility_review_complete", readonly=True)
+    feasibility_review_complete = fields.boolean(string="Feasbility Review Complete", compute="_compute_feasibility_review_complete", tracking = True)
 
     #Contract Review Checklist items
     contract_review_item_1 = fields.Boolean(string="Product Category is Accurately Configured")
@@ -36,96 +36,95 @@ class NxcSalesChecklistSaleOrder(models.Model):
     contract_review_item_6 = fields.Boolean(string="Customer Identity is Correct")
     contract_review_item_7 = fields.Boolean(string="Customer is Aware of Potential Risks")
     contract_review_item_8 = fields.Boolean(string="Delivery Date / Lead Time(s) Confirmed")
-    contract_review_complete = fields.Boolean(string="Contract Review Complete" compute="_compute_contract_review_complete", readonly=True)
-
-    def _block_order_confirm_in_draft(self):
-        action = self.env['ir.actions.server'].sudo().create({
-            'name': 'block_order_confirm_in_draft',
-            'type': 'ir.actions.server',
-            'model_id': self._name,
-            'trigger': 'on_update',
-            'target': 'self',
-            'action': 'block_order_confirm',
-            'domain': [
-                ['state', '=', 'draft'],
-            ],
-            'apply_on': [
-                ['state', '=', 'sale'],
-            ],
-        })
-
-        for record in self:
-            if record.x_studio_sales_checklist_status == 'blocked':
-                record.state = 'draft'
-                record.message_post(body="Cannot confirm Quotation: Awaiting sales checklists completion.")
-
-        return action
+    contract_review_complete = fields.Boolean(string="Contract Review Complete", compute="_compute_contract_review_complete", Tracking = True)
     
-    def _block_order_confirm_in_sent(self):
-        action = self.env['ir.actions.server'].sudo().create({
-            'name': 'block_order_confirm_in_sent',
-            'type': 'ir.actions.server',
-            'model_id': self._name,
-            'trigger': 'on_update',
-            'target': 'self',
-            'action': 'block_order_confirm',
-            'domain': [
-                ['state', '=', 'sent'],
-            ],
-            'apply_on': [
-                ['state', '=', 'sale'],
-            ],
-        })
-
-        for record in self:
-            if record.x_studio_sales_checklist_status == 'blocked':
-                record.state = 'sent'
-                record.message_post(body="Cannot confirm Quotation: Awaiting sales checklists completion.")
-
-        return action
-    
-    @api.onchange
+    @api.onchange('feasibility_review_item_1', 'feasibility_review_item_2', 'feasibility_review_item_3', 'feasibility_review_item_4', 'feasibility_review_item_5', 'feasibility_review_item_6', 'feasibility_review_item_7', 'feasibility_review_item_8', 'feasibility_review_item_9')
     def _compute_feasibility_review_complete(self):
     #This function determines whether the feasibility review is complete.
     #Returns True if the feasibility review is complete, False otherwise.
-      if (
-        record.feasibility_review_item_1 and
-        record.feasibility_review_item_2 and
-        record.feasibility_review_item_3 and
-        record.feasibility_review_item_4 and
-        record.feasibility_review_item_5 and
-        record.feasibility_review_item_6 and
-        record.feasibility_review_item_7 and
-        record.feasibility_review_item_8 and
-        record.feasibility_review_item_9 in ('1', '2', '3')
-      ):
-        return True
-      else:
-        return False
+      for record in self:
+        if (
+          record.feasibility_review_item_1 and
+          record.feasibility_review_item_2 and
+          record.feasibility_review_item_3 and
+          record.feasibility_review_item_4 and
+          record.feasibility_review_item_5 and
+          record.feasibility_review_item_6 and
+          record.feasibility_review_item_7 and
+          record.feasibility_review_item_8 and
+          record.feasibility_review_item_9 in ('1', '2', '3')
+        ):
+          record['feasibility_review_complete'] = True
+        else:
+          record['feasibility_review_complete'] = False
 
-    @api.onchange
+    @api.onchange('contract_review_item_1', 'contract_review_item_2', 'contract_review_item_3', 'contract_review_item_4', 'contract_review_item_5', 'contract_review_item_6', 'contract_review_item_7', 'contract_review_item_8')
     def _compute_contract_review_complete(self):
     #This function determines whether the contract review is complete.
     #Returns True if the contract review is complete, False otherwise.
-      if (
-        record.contract_review_item_1 and
-        record.contract_review_item_2 and
-        record.contract_review_item_3 and
-        record.contract_review_item_4 and
-        record.contract_review_item_5 and
-        record.contract_review_item_6 and
-        record.contract_review_item_7 and
-        record.contract_review_item_8 and
-      ):
-        return True
-      else:
-        return False
+      for record in self:
+        if (
+          record.contract_review_item_1 and
+          record.contract_review_item_2 and
+          record.contract_review_item_3 and
+          record.contract_review_item_4 and
+          record.contract_review_item_5 and
+          record.contract_review_item_6 and
+          record.contract_review_item_7 and
+          record.contract_review_item_8
+        ):
+          record['contract_review_complete'] = True
+        else:
+          record['contract_review_complete'] = False
     
-    @api.onchange
+    @api.onchange('feasibility_review_complete', 'contract_review_complete')
     def _compute_sales_checklist_status(self):
     #This method computes the value of the `sales_checklist_status` field.
     #The value of the `sales_checklist_status` field.
-      if record.feasibility_review_complete and record.contract_review_complete:
-        return 'done'
-      else:
-        return 'blocked'
+      for record in self:
+        if record.feasibility_review_complete and record.contract_review_complete:
+          record['sales_checklist_status'] = 'done'
+        else:
+          record['sales_checklist_status'] = 'blocked'
+
+    def _block_order_confirm_in_draft(self):
+      action = self.env['ir.actions.server'].sudo().create({
+          'name': 'block_order_confirm_in_draft',
+          'type': 'ir.actions.server',
+          'model_id': self._name,
+          'trigger': 'on_update',
+          'target': 'self',
+          'action': 'block_order_confirm',
+          'domain': [
+              ['state', '=', 'draft'],
+          ],
+          'apply_on': [
+              ['state', '=', 'sale'],
+          ],
+      })
+      for record in self:
+          if record.x_studio_sales_checklist_status == 'blocked':
+              record['state'] = 'draft'
+              record.message_post(body="Cannot confirm Quotation: Awaiting sales checklists completion.")
+      return action
+    
+    def _block_order_confirm_in_sent(self):
+      action = self.env['ir.actions.server'].sudo().create({
+          'name': 'block_order_confirm_in_sent',
+          'type': 'ir.actions.server',
+          'model_id': self._name,
+          'trigger': 'on_update',
+          'target': 'self',
+          'action': 'block_order_confirm',
+          'domain': [
+              ['state', '=', 'sent'],
+          ],
+          'apply_on': [
+              ['state', '=', 'sale'],
+          ],
+      })
+      for record in self:
+          if record.x_studio_sales_checklist_status == 'blocked':
+              record['state'] = 'sent'
+              record.message_post(body="Cannot confirm Quotation: Awaiting sales checklists completion.")
+      return action
