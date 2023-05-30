@@ -32,7 +32,7 @@
                 <field name="feasibility_review_item_6" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
                 <field name="feasibility_review_item_7" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
                 <field name="feasibility_review_item_8" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
-                <field name="feasibility_review_item_9" widget="boolean" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
+                <field name="feasibility_review_item_9" widget="selection" attrs="{'readonly': [['feasibility_review_complete','=',True]]}" force_save="True"/>
                 <field name="feasibility_review_complete" widget="boolean_toggle" readonly="True" invisible="True"/>
               </group>
             </group>
